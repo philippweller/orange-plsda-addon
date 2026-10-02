@@ -23,6 +23,10 @@ setup(
     package_data={
         "orangeplsda": ["widgets/icons/*.svg"],
     },
+    project_urls={
+        "Source": "https://github.com/philippweller/orange-plsda-addon",
+        "Bug Tracker": "https://github.com/philippweller/orange-plsda-addon/issues",
+    },
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Science/Research",

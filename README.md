@@ -1,48 +1,157 @@
-# Orangeplsda — PLS-DA & OPLS-DA for Orange3
+# orange-plsda-addon
 
-Custom Orange3 add-on providing **PLS-DA** (Partial Least Squares
-Discriminant Analysis) and **OPLS-DA** (Orthogonal PLS-DA, Trygg & Wold 2002)
-classification widgets, plus S-Plot support for biomarker discovery.
+PLS-DA & OPLS-DA für **Orange3** — Leistungsstarke Klassifikations-Widgets für
+die multivariate Analyse (Chemometrie, Biomarker-Findung).
 
-## Widgets
+- **PLS-DA** (Partial Least Squares Discriminant Analysis) — Klassifikation
+  mittels `PLSRegression` mit One-hot-kodiertem Ziel
+- **OPLS-DA** (Orthogonal PLS-DA, Trygg & Wold 2002) — trennt prädiktive von
+  orthogonaler (klassen-unabhängiger) Variation
 
-- **PLS-DA** — classification learner wrapping sklearn `PLSRegression` (one-hot Y)
-- **OPLS-DA** — separates predictive from orthogonal variation
+Beide Widgets erscheinen in Orange unter der Kategorie **PLS-DA**, direkt
+neben dem eingebauten PLS-R.
 
-Both appear in Orange under the **PLS-DA** category, next to the built-in PLS-R.
+---
 
-## Installation (any Orange3 ≥ 3.40)
+## 📋 Voraussetzungen
 
-Use **Orange's own Python**, not `/usr/bin/python3`.
+| Voraussetzung | Hinweis |
+|---|---|
+| Orange3 ≥ 3.40 installiert | Unter **Hilfe → Über** die Version prüfen |
+| Internet-Zugriff auf GitHub | zum Herunterladen des Repos |
 
-### macOS (Orange.app)
+> ⚠️ **Wichtig:** Es muss immer **Oranges eigenes Python** verwendet werden,
+> nicht `/usr/bin/python3`! Sonst wird das Add-on in der falschen Python-Umgebung
+> installiert und Orange findet es nicht.
 
-```bash
-/Applications/Orange.app/Contents/Frameworks/Python.framework/Versions/Current/bin/python3 -m pip install .
-```
+---
 
-### Windows (Orange Command Prompt) / Linux / conda
+## 🚀 Installation (Schritt für Schritt)
 
-```bash
-python -m pip install .
-```
+### macOS (Orange.app als `.app` installiert)
 
-### From GitHub (team workflow)
+**Schritt 1 — Oranges eingebettetes Python prüfen:**
 
-```bash
-python -m pip install git+https://github.com/<org>/orange-plsda-addon.git
-```
-
-Widgets appear on the next canvas open — no Orange restart needed.
-
-## Development
+Öffne einen Terminal und führe aus:
 
 ```bash
-# editable install with Orange's Python
-python -m pip install -e .
+/Applications/Orange.app/Contents/Frameworks/Python.framework/Versions/Current/bin/python3 --version
 ```
 
-Run the learner smoke tests:
+Es sollte eine Python-3.11-Version ausgeben. Notiere dir diesen Pfad — er wird
+in den nächsten Schritten gebraucht (im Folgenden abgekürzt als `ORANGEPY`).
+
+**Schritt 2 — Add-on von GitHub installieren:**
+
+```bash
+ORANGEPY=/Applications/Orange.app/Contents/Frameworks/Python.framework/Versions/Current/bin/python3
+$ORANGEPY -m pip install git+https://github.com/philippweller/orange-plsda-addon.git
+```
+
+**Schritt 3 — Installation prüfen (optional, empfohlen):**
+
+```bash
+$ORANGEPY -c "from orangeplsda import PLSDALearner; print('OK')"
+```
+
+Wenn `OK` erscheint, ist das Paket korrekt installiert.
+
+**Schritt 4 — In Orange öffnen:**
+
+Orange starten. Die Widgets **PLS-DA** und **OPLS-DA** erscheinen in der
+Widget-Leiste unter **PLS-DA**. Du musst Orange nicht neu starten — es reicht,
+das Canvas-Fenster erneut zu öffnen.
+
+---
+
+### Windows (Orange über den "Orange Command Prompt")
+
+**Schritt 1 — Orange Command Prompt öffnen:**
+
+Startmenü → *Orange* → *Orange Command Prompt* (bzw. *Qt Console*).
+
+**Schritt 2 — Installieren:**
+
+```cmd
+python -m pip install git+https://github.com/philippweller/orange-plsda-addon.git
+```
+
+**Schritt 3 — Prüfen:**
+
+```cmd
+python -c "from orangeplsda import PLSDALearner; print('OK')"
+```
+
+**Schritt 4 — Orange öffnen** und unter **PLS-DA** nachschauen.
+
+---
+
+### Linux / Conda / Venv
+
+**Schritt 1 — Umgebung aktivieren:**
+
+```bash
+conda activate orange    # oder: source .venv/bin/activate
+```
+
+**Schritt 2 — Installieren:**
+
+```bash
+pip install git+https://github.com/philippweller/orange-plsda-addon.git
+```
+
+**Schritt 3 — Prüfen:**
+
+```bash
+python -c "from orangeplsda import PLSDALearner; print('OK')"
+```
+
+**Schritt 4 — Orange starten** und das Widget suchen.
+
+---
+
+## 🔄 Updates einspielen (bei neuen Versionen)
+
+Auf **jedem** Rechner, auf dem das Add-on installiert ist:
+
+**Schritt 1 — aktuelle Version installieren (Überschreibt die alte):**
+
+```bash
+# macOS
+$ORANGEPY -m pip install --upgrade --force-reinstall git+https://github.com/philippweller/orange-plsda-addon.git
+```
+
+```bash
+# Windows / Linux / Conda
+python -m pip install --upgrade --force-reinstall git+https://github.com/philippweller/orange-plsda-addon.git
+```
+
+**Schritt 2 — Orange neu starten**, damit die neuen Widget-Versionen geladen werden.
+
+> Hinweis: `--force-reinstall` wird empfohlen, da Orange die Widgets beim
+> Canvas-Öffnen zwischenspeichert.
+
+---
+
+## 🗑️ Deinstallation
+
+```bash
+# macOS
+$ORANGEPY -m pip uninstall orangeplsda -y
+```
+
+```bash
+# Windows / Linux / Conda
+python -m pip uninstall orangeplsda -y
+```
+
+Danach Orange neu starten — die Widgets sind verschwunden.
+
+---
+
+## 🧪 Kurzer Funktionstest (Entwickler)
+
+Mit Oranges Python auf einem der mitgelieferten Datensätze:
 
 ```bash
 python -c "
@@ -54,10 +163,41 @@ for L, kw in [(PLSDALearner, dict(n_components=2)),
               (OPLSDALearner, dict(n_components=1, n_ortho=1))]:
     t = Table('iris'); m = L(**kw)(t)
     p, pr = m(t, ret=Model.ValueProbs)
-    print(L.__name__, (p == t.Y.flatten()).mean(), pr.shape)
+    print(L.__name__, round(float((p == t.Y.flatten()).mean()), 3), pr.shape)
 "
 ```
 
-## License
+Erwartete Ausgabe (beispielhaft, kann leicht abweichen):
 
-MIT
+```
+PLSDALearner 0.813 (150, 3)
+OPLSDALearner 0.8 (150, 3)
+```
+
+---
+
+## 🛠️ Fehlerbehebung
+
+| Problem | Lösung |
+|---|---|
+| `from orangeplsda import ...` schlägt fehl | Du hast `/usr/bin/python3` statt Oranges Python benutzt. Siehe Schritt 1 oben. |
+| Widget erscheint nicht in Orange | Gelöschte `*.egg-info`/`__pycache__` prüfen; Orange vollständig neu starten; `pip show orangeplsda` ausführen. |
+| `Host key verification failed` beim pip install | Läuft nur bei einem gepushten SSH-Workflow, nicht bei `git+https://`. Nutze die https-URL. |
+| alte Version bleibt | `pip install --force-reinstall` verwenden (siehe Updates). |
+
+---
+
+## 📦 Entwicklung / Repo lokal ausprobieren
+
+```bash
+git clone git@github.com:philippweller/orange-plsda-addon.git
+cd orange-plsda-addon
+# Editable-Install mit Oranges Python:
+$ORANGEPY -m pip install -e .
+```
+
+---
+
+## 📄 Lizenz
+
+MIT © Philipp Weller

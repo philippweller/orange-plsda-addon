@@ -26,25 +26,58 @@ neben dem eingebauten PLS-R.
 
 ---
 
+## 🔍 Oranges eingebettetes Python finden (wichtig!)
+
+Der Pfad zu Oranges Python **hängt von der Orange-Version ab**. Je nachdem
+ob Orange mit Python 3.11 oder 3.12 gebaut wurde, heißt das Binary
+`python3`, `python3.11` oder `python3.12`.
+
+**Sichere Methode — das echte Python-Binary lokalisieren:**
+
+```bash
+ls /Applications/Orange.app/Contents/Frameworks/Python.framework/Versions/
+# zeigt z.B.:  3.12   und   Current -> 3.12
+
+# Dann das echte Binary finden:
+find /Applications/Orange.app -name "python3*" -type f 2>/dev/null | grep -i bin
+```
+
+Typische gültige Pfade (je nach Version):
+
+| Orange mit | Python-Binary |
+|---|---|
+| Python 3.11 | `.../Versions/Current/bin/python3` |
+| Python 3.11 (nur versioniert) | `.../Versions/Current/bin/python3.11` |
+| Python 3.12 | `.../Versions/Current/bin/python3.12` |
+| Intel-Mac mit 3.12 | `.../Versions/Current/bin/python3.12-intel64` |
+
+> `Current` ist ein Symlink zur installierten Version (`Current -> 3.12`),
+> funktioniert also in allen Fällen. Ersetze in den Befehlen unten
+> `ORANGEPY` durch **den** gefundenen Pfad.
+
+---
+
 ## 🚀 Installation (Schritt für Schritt)
 
 ### macOS (Orange.app als `.app` installiert)
 
 **Schritt 1 — Oranges eingebettetes Python prüfen:**
 
-Öffne einen Terminal und führe aus:
+Öffne einen Terminal und führe aus (nutze den Pfad aus dem Abschnitt
+[Oranges eingebettetes Python finden](#-oranges-eingebettetes-python-finden-wichtig);
+je nach Orange-Version heißt das Binary `python3`, `python3.11` oder `python3.12`):
 
 ```bash
-/Applications/Orange.app/Contents/Frameworks/Python.framework/Versions/Current/bin/python3 --version
+/Applications/Orange.app/Contents/Frameworks/Python.framework/Versions/Current/bin/python3.12 --version
 ```
 
-Es sollte eine Python-3.11-Version ausgeben. Notiere dir diesen Pfad — er wird
+Es sollte eine Python-3.x-Version ausgeben. Notiere dir diesen Pfad — er wird
 in den nächsten Schritten gebraucht (im Folgenden abgekürzt als `ORANGEPY`).
 
 **Schritt 2 — Add-on von GitHub installieren:**
 
 ```bash
-ORANGEPY=/Applications/Orange.app/Contents/Frameworks/Python.framework/Versions/Current/bin/python3
+ORANGEPY=/Applications/Orange.app/Contents/Frameworks/Python.framework/Versions/Current/bin/python3.12
 $ORANGEPY -m pip install git+https://github.com/philippweller/orange-plsda-addon.git
 ```
 
@@ -180,6 +213,7 @@ OPLSDALearner 0.8 (150, 3)
 
 | Problem | Lösung |
 |---|---|
+| "`python3` ist nicht vorhanden" / Datei nicht gefunden | Das Binary heißt je nach Orange-Version `python3`, `python3.11` oder `python3.12` (z.B. Orange mit Python 3.12). Mit `find /Applications/Orange.app -name "python3*" -type f` den echten Namen ermitteln. |
 | `from orangeplsda import ...` schlägt fehl | Du hast `/usr/bin/python3` statt Oranges Python benutzt. Siehe Schritt 1 oben. |
 | Widget erscheint nicht in Orange | Gelöschte `*.egg-info`/`__pycache__` prüfen; Orange vollständig neu starten; `pip show orangeplsda` ausführen. |
 | `Host key verification failed` beim pip install | Läuft nur bei einem gepushten SSH-Workflow, nicht bei `git+https://`. Nutze die https-URL. |

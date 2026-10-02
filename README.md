@@ -13,6 +13,45 @@ neben dem eingebauten PLS-R.
 
 ---
 
+## ⚡ Automatischer Installer (empfohlen)
+
+Dieses Repo enthält `orange-install.py` — ein plattformübergreifendes Tool,
+das **Oranges eigenes Python automatisch findet** und das Add-on korrekt
+installiert (macOS / Windows / Linux). Kein manuelles Pfad-Raten mehr:
+
+```bash
+# PLS-DA installieren:
+python orange-install.py plsda
+
+# NMR-Add-on installieren:
+python orange-install.py nmr
+
+# nur zeigen, welches Python erkannt wurde:
+python orange-install.py --show
+
+# bestehende Installation prüfen:
+python orange-install.py --check plsda
+```
+
+Läuft mit **jedem** Python (nur Standardbibliothek). Klappt die
+Auto-Erkennung ausnahmsweise nicht:
+
+```bash
+python orange-install.py --python /pfad/zum/orange/python
+```
+
+> ▶️ **Direkt ausführen ohne Clone** (das Add-on wird trotzdem via GitHub
+> installiert):
+> ```bash
+> curl -fsSL https://raw.githubusercontent.com/philippweller/orange-plsda-addon/main/orange-install.py -o orange-install.py && python3 orange-install.py plsda
+> ```
+
+Das Tool bedient auch den **Windows-`--no-user`-Fall** automatisch, sodass
+das Add-on in Oranges eigene `site-packages` landet statt in die unsichtbare
+User-Site.
+
+---
+
 ## 📋 Voraussetzungen
 
 | Voraussetzung | Hinweis |
